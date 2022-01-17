@@ -1,7 +1,7 @@
 Pass: titansliver123
 login: titanslave
-<br >Теперь создайте на рабочем столе пустой документ и назовите его Hello.c. В нем напишите 
-# include <stdio.h>
+<br >Теперь создайте на рабочем столе пустой документ и назовите его Hello.c. В нем напишите: 
+<br>include <stdio.h>
 void main ()
 {
 printf("Первая программма в Unix! \n");
