@@ -9,3 +9,29 @@
 записать строку в файл;
 закрыть файл.
 Почему необходимо создавать объект класса ofstream, а не класса ifstream? Потому, что нужно сделать запись в файл, а если бы нужно было считать данные из файла, то создавался бы объект класса ifstream.
+  
+  Для работы с системной датой и временем используется библиотека ctime и chrono
+  
+  ofstream file;
+		file.open("coordinat.txt", ios_base::app);
+		unsigned long milliseconds_since_epoch = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
+		file << milliseconds_since_epoch << " " << x << " " << y << endl;
+		file.close();
+  
+  В этой части кода мы открываем наш txt файл и записываем в него системное время с помощью chrono, time_sincce_epoch и т.д
+  Так же, записываем в него координаты по х и у, к каждой точке своё время постановки на карту
+  
+  
+  void my_mouse_callback(int event, int x, int y, int flags, void* param)
+{
+	if (event == EVENT_LBUTTONDOWN)
+	{
+		Mat* pImage = (Mat*)param;
+		Mat image = *pImage;
+		Point trackBox;
+		trackBox = Point(x, y);
+
+		ellipse(image, Point(x, y), Size(20, 17), -50, 100, 30, Scalar(0, 255, 255), 40, 8, 0);
+  }
+  
+  С помощью этого кода мы обрабатываем нажатие правой кнопки мишы, после обработки на нашем изображении рисуется элипс с заданными параметрами.
