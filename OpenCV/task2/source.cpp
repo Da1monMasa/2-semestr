@@ -17,29 +17,41 @@ using namespace cv;
 using namespace std;
 
 void my_mouse_callback(int event, int x, int y, int flags, void* param);
-int reading(string Filename, string imagename, double wl, double hl, double wr, double hr);
+void reading(string Filename, string imagename, double wl, double hl, double wr, double hr);
 void file();
 
 int main(int argc, char** argv) {
-	// устанвливаем русскую локаль для консоли
+	// устанавливаем русскую локализацию для консоли
 	setlocale(LC_ALL, "Russian");
 	//file();
 
-	const char* imagename = "Dzerzhinsky.png";
+	const char* imagename = "WAYTOHOME.jpg";
 	const char* traectory_file = "coordinat.txt";
 	double wl = 55.639799;
 	double hl = 37.828428;
 	double wr = 55.622020;
 	double hr = 37.873735;
-	reading("coordinat.txt", "Dzerzhinsky.png", wl, hl, wr, hr);
 
-	/*Mat image = imread("Dzerzhinsky.png");
-	namedWindow("modernGoogle");
-	setMouseCallback("modernGoogle", my_mouse_callback, &image);
-	while(true){
-		imshow("modernGoogle",image);
-		waitKey(30);}
-	return(0);*/
+	string check;
+	cout << "read or enter"<<endl;
+	cin >> check;
+	if (check == "read") {
+		reading("coordinat.txt", "WAYTOHOME.jpg", wl, hl, wr, hr);
+	}
+	else if (check == "enter") {
+		Mat image = imread("WAYTOHOME.jpg");
+		namedWindow("modernGoogle");
+		setMouseCallback("modernGoogle", my_mouse_callback, &image);
+		while (true) {
+			imshow("modernGoogle", image);
+			waitKey(30);
+		}
+	}
+	else {
+		cout << "Ошибка ввода" << endl;
+		waitKey(30);
+	}
+	return(0);
 }
 
 void file()
@@ -49,7 +61,13 @@ void file()
 	unsigned long milliseconds_since_epoch = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
 	file << milliseconds_since_epoch << endl;
 	file.close();
-
+	Mat image = imread("WAYTOHOME.jpg");
+		namedWindow("modernGoogle");
+		setMouseCallback("modernGoogle", my_mouse_callback, &image);
+		while (true) {
+			imshow("modernGoogle", image);
+			waitKey(30);
+		}
 }
 
 void my_mouse_callback(int event, int x, int y, int flags, void* param)
@@ -58,7 +76,13 @@ void my_mouse_callback(int event, int x, int y, int flags, void* param)
 	{
 		Mat* pImage = (Mat*)param;
 		Mat image = *pImage;
-		circle(image, Point(x, y), 5, Scalar(255, 0, 0), FILLED, 8, 0);
+		Point trackBox;
+		trackBox = Point(x, y);
+
+		ellipse(image, Point(x, y), Size(20, 17), -50, 100, 30, Scalar(0, 255, 255), 40, 8, 0);
+
+		//circle(image, Point(x, y), 5, Scalar(255, 0, 0), FILLED, 8, 0);
+
 		ofstream file;
 		file.open("coordinat.txt", ios_base::app);
 		unsigned long milliseconds_since_epoch = chrono::system_clock::now().time_since_epoch() / chrono::milliseconds(1);
@@ -67,7 +91,7 @@ void my_mouse_callback(int event, int x, int y, int flags, void* param)
 	}
 }
 
-int reading(string Filename, string imagename, double wl, double hl, double wr, double hr)
+void reading(string Filename, string imagename, double wl, double hl, double wr, double hr)
 {
 	string File = Filename;
 	int x, y, xm, ym;
@@ -86,7 +110,7 @@ int reading(string Filename, string imagename, double wl, double hl, double wr, 
 		long double koef_mashtabW, koef_mashtabH;
 		koef_mashtabW = (wl - wr) / img.size().width;
 		koef_mashtabH = (hr - hl) / img.size().height;
-		//cout << koef_mashtabW << koef_mashtabH << endl;
+		cout << koef_mashtabW << koef_mashtabH << endl;
 
 		f >> t >> x >> y;
 
@@ -95,12 +119,12 @@ int reading(string Filename, string imagename, double wl, double hl, double wr, 
 		{
 			f >> tt >> xm >> ym;
 
-			//cout << "Метка времени: " << t << " x: " << x << " y: " << y << endl;
 			shirota = koef_mashtabW * (img.size().width - x) + wr;
 			dolgota = koef_mashtabH * (img.size().height - y) + hl;
 			cout << "Метка времени: " << t << " широта: " << shirota << " долгота: " << dolgota << endl;
 
-			circle(img, Point(x, y), 5, Scalar(0, 0, 255), FILLED, 8, 0);
+			ellipse(img, Point(x, y), Size(20, 17), -50, 100, 30, Scalar(255, 255, 0), 40, 8, 0);
+
 			x = xm;
 			y = ym;
 			imshow("route", img);
@@ -110,5 +134,4 @@ int reading(string Filename, string imagename, double wl, double hl, double wr, 
 	}
 	f.close();
 	cout << endl;
-	return 0;
 }
