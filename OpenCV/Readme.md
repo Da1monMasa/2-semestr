@@ -47,3 +47,35 @@
   }
   
   С помощью этого кода мы обрабатываем нажатие правой кнопки мишы, после обработки на нашем изображении рисуется элипс с заданными параметрами.
+
+
+using System;
+using ClassLibrary1;
+namespace ConsoleAppTest
+{
+    class Program
+    {
+        static double MinAVG(double[] marks)
+        {
+            double sum = 0;
+            for (int i = 0; i < marks.Length; i++)
+            {
+                Console.WriteLine(marks[i]);
+                sum += marks[i];
+            }
+            double minavg = sum / marks.Length;
+            Console.WriteLine("minavg = " + minavg);
+
+            return 0;
+        }
+        static void Main(string[] args)
+        {
+            double[] marks = {3, 3, 4, 5};
+            MinAVG(marks);
+            Library.test_function();
+            Console.WriteLine("Hello World!");
+        }
+       
+
+    }
+}
